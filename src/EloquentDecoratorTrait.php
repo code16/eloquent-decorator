@@ -106,8 +106,12 @@ trait EloquentDecoratorTrait {
 		return $this->object->getRouteKeyName();
     }
 
-    public function resolveRouteBinding($value){
-		return $this->object->resolveRouteBinding($value);
+    public function resolveRouteBinding($value, $field = null){
+		return $this->object->resolveRouteBinding($value, $field);
+    }
+
+    public function resolveChildRouteBinding($childType, $value, $field){
+        return $this->object->resolveChildRouteBinding($childType, $value, $field);
     }
 
 }

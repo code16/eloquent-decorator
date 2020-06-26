@@ -8,10 +8,6 @@ use Orchestra\Testbench\TestCase;
 class TestCaseWithDatbase extends TestCase
 {
 
-    // -----------------------------------------------
-    //  Load .env Environment Variables
-    // -----------------------------------------------
-
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
@@ -21,36 +17,6 @@ class TestCaseWithDatbase extends TestCase
             $dotenv->load();
         }
     }
-
-    // -----------------------------------------------
-    //   Set Laravel App Configuration
-    // -----------------------------------------------
-
-    protected function getEnvironmentSetUp($app) {
-        $config = $app['config'];
-
-        $config->set('app.debug', 'true');
-        $config->set('database.default', 'testbench');
-        $config->set('database.connections.testbench', [
-            'driver'    => 'mysql',
-            'host'      => getenv('DB_HOST'),
-            'username'  => getenv('DB_USER'),
-            'password'  => getenv('DB_PASS'),
-            'database'  => getenv('DB_DATABASE'),
-            'port'      => env('DB_PORT', '3306'),
-            'charset'   => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix'    => '',
-            'strict'    => env('DB_STRICT', false),
-            'engine'    => null,
-        ]);
-
-        $this->pdo = $app['db']->connection()->getPdo();
-    }
-
-    // -----------------------------------------------
-    //  Setup Database
-    // -----------------------------------------------
 
     protected $database;
 
@@ -67,30 +33,12 @@ class TestCaseWithDatbase extends TestCase
         $database->bootEloquent();
         $database->setAsGlobal();
         $this->database = $database;
-
-        // Add your migrations here. ie:
-
-        // $this->database->schema()->create('TableName', function ($table) {
-        //     $table->increments('id');
-        // });        
     }
-
-    public function tearDown(): void
-    {
-        // Drop tables here. ie:
-        // $this->database->schema()->drop('TableName');
-    }
-
-    // -----------------------------------------------
 
     public function testDatabaseConnection()
     {
         $this->assertInstanceOf('Illuminate\Database\SQLiteConnection', $this->database->connection());
     }
-
-    // -----------------------------------------------
-    //  Added functionality
-    // -----------------------------------------------
 
     protected function seeInDatabase($table, array $data, $connection = null)
     {
